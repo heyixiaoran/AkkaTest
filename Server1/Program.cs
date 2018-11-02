@@ -1,12 +1,7 @@
 ﻿using System;
 using System.IO;
-
-using Actors;
-
 using Akka.Actor;
 using Akka.Configuration;
-
-using Autofac;
 
 namespace Server1
 {
@@ -27,16 +22,15 @@ namespace Server1
                 throw new ConfigurationException("not found akka.conf");
             }
 
-            // 注册类型
-            ContainerBuilder builder = new ContainerBuilder();
+            //ContainerBuilder builder = new ContainerBuilder();
 
             //builder.RegisterType<ActorSystem>();
             //builder.RegisterType<ServerActor>();
-            builder.RegisterType<ClientActor1>();
-            builder.RegisterType<ClientActor2>();
+            //builder.RegisterType<ClientActor1>();
+            //builder.RegisterType<ClientActor2>();
             //builder.RegisterAssemblyTypes(Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory + @"ActorLib.dll"));
 
-            IContainer container = builder.Build();
+            //IContainer container = builder.Build();
 
             //// Create the ActorSystem
             //using (var system = ActorSystem.Create("ClusterSystem", _config))
@@ -54,11 +48,6 @@ namespace Server1
             //}
 
             var system = ActorSystem.Create("ClusterSystem", _config);
-            var server1Actor = system.ActorOf(Props.Create(() => new ServerActor()), "server1");
-            Console.WriteLine(server1Actor.Path.Name);
-
-            var client2Actor = system.ActorOf(Props.Create(() => new ClientActor2()), "client2");
-            Console.WriteLine(@"****************************************" + client2Actor.Path.Name + @"****************************************");
 
             Console.ReadLine();
         }

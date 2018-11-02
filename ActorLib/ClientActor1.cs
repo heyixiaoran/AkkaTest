@@ -2,13 +2,11 @@
 
 using Akka.Actor;
 using Akka.Cluster;
-using Akka.Cluster.Tools.PublishSubscribe;
 
 namespace Actors
 {
     public class ClientActor1 : ReceiveActor
     {
-        private int _count;
         protected Cluster Cluster = Cluster.Get(Context.System);
 
         public ClientActor1()
@@ -16,18 +14,18 @@ namespace Actors
             Receive<string>(msg =>
             {
                 Console.WriteLine(msg);
-                Sender.Tell(msg);
+                Context.ActorSelection("/user/localactor").Tell(msg);
             });
 
-            var mediator = DistributedPubSub.Get(Context.System);
-            mediator.Tell(new Subscribe(TopicName, Self));
-            Receive<SubscribeAck>(ack => Console.WriteLine($"Subscribed to '{TopicName}'"));
-            Receive<string>(s => Console.WriteLine($"Received a message: '{s}'"));
+            Receive<int>(msg =>
+            {
+                Console.WriteLine("Replay:" + msg);
+            });
         }
 
         protected override void PreStart()
         {
-            Cluster.Subscribe(Self, new[] { typeof(ClusterEvent.IMemberEvent) });
+            Cluster.Subscribe(Self, new[] { typeof(ClusterEvent.MemberUp) });
         }
 
         protected override void PostStop()

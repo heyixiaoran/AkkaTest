@@ -26,7 +26,8 @@ namespace Client2
             }
 
             var system = ActorSystem.Create("ClusterSystem", _config);
-            var clientActor2 = system.ActorOf(Props.Create(() => new ClientActor2()), "ClientActor2");
+
+            var clientActor2 = system.ActorOf(Props.Create(() => new ClientActor2()), "client2");
 
             Console.ReadLine();
         }
