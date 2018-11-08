@@ -6,7 +6,6 @@ using Actors;
 
 using Akka.Actor;
 using Akka.Configuration;
-using Akka.Routing;
 
 namespace Client1
 {
@@ -30,7 +29,7 @@ namespace Client1
             var system = ActorSystem.Create("ClusterSystem", _config);
 
             //var router = system.ActorOf(FromConfig.Instance.Props(), "routerActor");
-            var clientActor1 = system.ActorOf(Props.Create(() => new ClientActor1()), "client1");
+            //var clientActor1 = system.ActorOf(Props.Create(() => new ClientActor1()), "client1");
 
             //var connect = true;
             //while (connect)
@@ -47,7 +46,7 @@ namespace Client1
             //    Thread.Sleep(1000);
             //}
 
-            //var clientActor1 = system.ActorOf(Props.Create(() => new ClientActor1()), "client1");
+            var clientActor1 = system.ActorOf(Props.Create(() => new ClientActor1()), "client1");
 
             var count = 1;
             for (int i = 0; i < 100; i++)
