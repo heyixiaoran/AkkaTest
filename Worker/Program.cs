@@ -4,9 +4,9 @@ using Actors;
 using Akka.Actor;
 using Akka.Configuration;
 
-namespace Client2
+namespace Worker
 {
-    internal class Program
+    public class Program
     {
         private static Config _config;
 
@@ -25,7 +25,7 @@ namespace Client2
 
             var system = ActorSystem.Create("ClusterSystem", _config);
 
-            var clientActor2 = system.ActorOf(Props.Create(() => new ClientActor2()), "client2");
+            var clientActor2 = system.ActorOf(Props.Create(() => new WorkerActor()), "client2");
 
             //var actor = system.ActorSelection("/user/client2").Anchor;
             //var router = system.ActorOf(Props.Empty.WithRouter(FromConfig.Instance), "client2");

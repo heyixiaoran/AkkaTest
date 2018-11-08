@@ -4,9 +4,9 @@ using Akka.Actor;
 
 namespace Actors
 {
-    public class ServerActor : ReceiveActor
+    public class LoadBalanceActor : ReceiveActor
     {
-        public ServerActor()
+        public LoadBalanceActor()
         {
             Receive<string>(msg =>
             {

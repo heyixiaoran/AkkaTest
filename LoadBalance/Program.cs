@@ -3,7 +3,7 @@ using System.IO;
 using Akka.Actor;
 using Akka.Configuration;
 
-namespace Server1
+namespace LoadBalance
 {
     internal class Program
     {
