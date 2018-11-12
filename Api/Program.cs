@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
-
 using Actors;
 
 using Akka.Actor;
+using Akka.Cluster;
+using Akka.Cluster.Sharding;
 using Akka.Configuration;
 
 namespace Api
@@ -13,9 +14,13 @@ namespace Api
     {
         private static Config _config;
 
+        private static string _systemName;
+
+        public static IActorRef ApiRegion { get; private set; }
+
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is Client1 !");
+            Console.WriteLine("This is Api !");
 
             if (File.Exists("./akka.conf"))
             {
@@ -26,35 +31,28 @@ namespace Api
                 throw new ConfigurationException("not found akka.conf");
             }
 
-            var system = ActorSystem.Create("ClusterSystem", _config);
-
-            //var router = system.ActorOf(FromConfig.Instance.Props(), "routerActor");
-            //var clientActor1 = system.ActorOf(Props.Create(() => new ClientActor1()), "client1");
-
-            //var connect = true;
-            //while (connect)
-            //{
-            //    router.Ask<Routees>(new GetRoutees()).ContinueWith((r) =>
-            //    {
-            //        Console.WriteLine("Reoutees Count: " + r.Result.Members.Count());
-            //        if (r.Result.Members.Count() >= 1)
-            //        {
-            //            connect = false;
-            //        }
-            //    });
-
-            //    Thread.Sleep(1000);
-            //}
-
-            var clientActor1 = system.ActorOf(Props.Create(() => new ApiActor()), "client1");
-
-            var count = 1;
-            for (int i = 0; i < 3; i++)
+            var lighthouseConfig = _config.GetConfig("system");
+            if (lighthouseConfig != null)
             {
-                clientActor1.Tell(count + " @**************");
-                count += 1;
-                Thread.Sleep(1000);
+                _systemName = lighthouseConfig.GetString("name");
             }
+
+            var system = ActorSystem.Create(_systemName, _config);
+
+            var cluster = Cluster.Get(system);
+            cluster.RegisterOnMemberUp(() =>
+            {
+                var clusterSharding = ClusterSharding.Get(system);
+                ApiRegion = clusterSharding.Start("api-Actor", Props.Create<ApiActor>(), ClusterShardingSettings.Create(system), new MessageExtractor());
+
+                var count = 1;
+                for (int i = 0; i < 3; i++)
+                {
+                    ApiRegion.Tell(new ShardEnvelope { ShardId = count, EntityId = count, Message = count + " @***" });
+                    count += 1;
+                    Thread.Sleep(1000);
+                }
+            });
 
             Console.ReadLine();
         }

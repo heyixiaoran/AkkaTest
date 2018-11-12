@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+
 using Actors;
+
 using Akka.Actor;
 using Akka.Configuration;
 
@@ -10,9 +12,11 @@ namespace Worker
     {
         private static Config _config;
 
+        private static string _systemName;
+
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is Client2 !");
+            Console.WriteLine("This is Worker !");
 
             if (File.Exists("./akka.conf"))
             {
@@ -23,12 +27,15 @@ namespace Worker
                 throw new ConfigurationException("not found akka.conf");
             }
 
-            var system = ActorSystem.Create("ClusterSystem", _config);
+            var lighthouseConfig = _config.GetConfig("system");
+            if (lighthouseConfig != null)
+            {
+                _systemName = lighthouseConfig.GetString("name");
+            }
 
-            var clientActor2 = system.ActorOf(Props.Create(() => new WorkerActor()), "client2");
+            var system = ActorSystem.Create(_systemName, _config);
 
-            //var actor = system.ActorSelection("/user/client2").Anchor;
-            //var router = system.ActorOf(Props.Empty.WithRouter(FromConfig.Instance), "client2");
+            var shard = system.BootstrapShard<WorkerActor>(Roles.Sharding);
 
             Console.ReadLine();
         }
