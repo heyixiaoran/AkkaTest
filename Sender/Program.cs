@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading;
 using Actors;
 
 using Akka.Actor;
@@ -8,7 +7,8 @@ using Akka.Cluster;
 using Akka.Cluster.Sharding;
 using Akka.Configuration;
 
-namespace Api
+namespace Sender
+
 {
     internal class Program
     {
@@ -16,11 +16,11 @@ namespace Api
 
         private static string _systemName;
 
-        public static IActorRef ApiRegion { get; private set; }
+        public static IActorRef SenderRegion { get; set; }
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is Api !");
+            Console.WriteLine("This is Sender !");
 
             if (File.Exists("./akka.conf"))
             {
@@ -43,14 +43,11 @@ namespace Api
             cluster.RegisterOnMemberUp(() =>
             {
                 var clusterSharding = ClusterSharding.Get(system);
-                ApiRegion = clusterSharding.Start("api-Actor", Props.Create<SenderActor>(), ClusterShardingSettings.Create(system), new MessageExtractor());
+                SenderRegion = clusterSharding.Start(nameof(SenderActor), Props.Create<SenderActor>(), ClusterShardingSettings.Create(system).WithRole(Roles.Sharding), new MessageExtractor());
 
-                var count = 1;
-                for (int i = 0; i < 3; i++)
+                for (var i = 1; i < 11; i++)
                 {
-                    ApiRegion.Tell(new ShardEnvelope { ShardId = count, EntityId = count, Message = count + " @***" });
-                    count += 1;
-                    Thread.Sleep(1000);
+                    SenderRegion.Tell(new ShardEnvelope { ShardId = i, EntityId = i, Message = i + " @***" });
                 }
             });
 

@@ -17,12 +17,12 @@ namespace Actors
 
             var mediator = DistributedPubSub.Get(Context.System).Mediator;
 
-            Command<TestMessage>(msg =>
+            Command<ShardEnvelope>(msg =>
                 {
-                    Persist(new TestMessage("test", DateTime.UtcNow), e =>
-                         {
-                             mediator.Tell(new Publish("testTopic", msg));
-                         });
+                    Persist(new ShardEnvelope { ShardId = 1, EntityId = 1, Message = "test" }, e =>
+                    {
+                        mediator.Tell(new Publish("testTopic", msg));
+                    });
                 });
         }
     }

@@ -4,9 +4,11 @@ using System.IO;
 using Actors;
 
 using Akka.Actor;
+using Akka.Cluster;
+using Akka.Cluster.Sharding;
 using Akka.Configuration;
 
-namespace Worker
+namespace Receiver
 {
     public class Program
     {
@@ -14,9 +16,11 @@ namespace Worker
 
         private static string _systemName;
 
+        public static IActorRef ReceiverShardActor;
+
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is Worker !");
+            Console.WriteLine("This is Receiver !");
 
             if (File.Exists("./akka.conf"))
             {
@@ -35,7 +39,12 @@ namespace Worker
 
             var system = ActorSystem.Create(_systemName, _config);
 
-            var shard = system.BootstrapShard<ReceiverActor>(Roles.Sharding);
+            var cluster = Cluster.Get(system);
+            cluster.RegisterOnMemberUp(() =>
+            {
+                var clusterSharding = ClusterSharding.Get(system);
+                ReceiverShardActor = clusterSharding.StartProxy(nameof(Receive), Roles.Sharding, new MessageExtractor());
+            });
 
             Console.ReadLine();
         }
