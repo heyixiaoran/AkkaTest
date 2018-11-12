@@ -35,7 +35,7 @@ namespace Worker
 
             var system = ActorSystem.Create(_systemName, _config);
 
-            var shard = system.BootstrapShard<WorkerActor>(Roles.Sharding);
+            var shard = system.BootstrapShard<ReceiverActor>(Roles.Sharding);
 
             Console.ReadLine();
         }

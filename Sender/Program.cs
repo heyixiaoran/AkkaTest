@@ -43,7 +43,7 @@ namespace Api
             cluster.RegisterOnMemberUp(() =>
             {
                 var clusterSharding = ClusterSharding.Get(system);
-                ApiRegion = clusterSharding.Start("api-Actor", Props.Create<ApiActor>(), ClusterShardingSettings.Create(system), new MessageExtractor());
+                ApiRegion = clusterSharding.Start("api-Actor", Props.Create<SenderActor>(), ClusterShardingSettings.Create(system), new MessageExtractor());
 
                 var count = 1;
                 for (int i = 0; i < 3; i++)

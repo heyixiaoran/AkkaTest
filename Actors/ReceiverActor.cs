@@ -5,9 +5,9 @@ using Akka.Cluster.Tools.PublishSubscribe;
 
 namespace Actors
 {
-    public class WorkerActor : ReceiveActor
+    public class ReceiverActor : ReceiveActor
     {
-        public WorkerActor()
+        public ReceiverActor()
         {
             var mediator = DistributedPubSub.Get(Context.System).Mediator;
 

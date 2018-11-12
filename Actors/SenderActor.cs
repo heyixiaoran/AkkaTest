@@ -1,18 +1,19 @@
 ﻿using System;
+
 using Akka.Actor;
 using Akka.Cluster.Tools.PublishSubscribe;
 using Akka.Persistence;
 
 namespace Actors
 {
-    public class ApiActor : ReceivePersistentActor
+    public class SenderActor : ReceivePersistentActor
     {
         public override string PersistenceId { get; }
 
-        public ApiActor()
+        public SenderActor()
         {
             PersistenceId = Uri.UnescapeDataString(Self.Path.Name);
-            Console.WriteLine($"ApiActor {PersistenceId} started");
+            Console.WriteLine($"{nameof(SenderActor)} {PersistenceId} started");
 
             var mediator = DistributedPubSub.Get(Context.System).Mediator;
 
@@ -20,7 +21,7 @@ namespace Actors
                 {
                     Persist(new TestMessage("test", DateTime.UtcNow), e =>
                          {
-                             mediator.Tell(new Publish(Topics.MessageTopic, msg));
+                             mediator.Tell(new Publish("testTopic", msg));
                          });
                 });
         }
