@@ -40,7 +40,7 @@ namespace Lighthouse
             }
 
             _seeds = _config.GetStringList("akka.cluster.seed-nodes");
-            var ports = new List<int> { 2550, 2551, 2552 };
+            var ports = new List<int> { 2550 };
 
             foreach (var port in ports)
             {
