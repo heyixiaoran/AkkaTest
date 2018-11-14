@@ -43,7 +43,7 @@ namespace Receiver
             cluster.RegisterOnMemberUp(() =>
             {
                 var clusterSharding = ClusterSharding.Get(system);
-                ReceiverShardActor = clusterSharding.StartProxy(nameof(Receive), Roles.Sharding, new MessageExtractor());
+                ReceiverShardActor = clusterSharding.StartProxy(nameof(SenderActor), Roles.Sharding, new MessageExtractor());
             });
 
             Console.ReadLine();

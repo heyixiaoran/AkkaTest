@@ -1,29 +1,21 @@
 ﻿using System;
-
 using Akka.Actor;
-using Akka.Cluster.Tools.PublishSubscribe;
-using Akka.Persistence;
+using Akka.Cluster.Sharding;
 
 namespace Actors
 {
-    public class SenderActor : ReceivePersistentActor
+    public class SenderActor : ReceiveActor
     {
-        public override string PersistenceId { get; }
-
         public SenderActor()
         {
-            PersistenceId = Uri.UnescapeDataString(Self.Path.Name);
-            Console.WriteLine($"{nameof(SenderActor)} {PersistenceId} started");
+            var shard = ClusterSharding.Get(Context.System).ShardRegion(nameof(RegionActor));
 
-            var mediator = DistributedPubSub.Get(Context.System).Mediator;
-
-            Command<ShardEnvelope>(msg =>
-                {
-                    Persist(new ShardEnvelope { ShardId = 1, EntityId = 1, Message = "test" }, e =>
-                    {
-                        mediator.Tell(new Publish("testTopic", msg));
-                    });
-                });
+            Receive<TestMessage>(_ =>
+            {
+                var shardId = new Random().Next(1, 4);
+                var entityId = new Random().Next(1, 9);
+                shard.ShardedTell(shardId, entityId, "msg: " + entityId);
+            });
         }
     }
 }

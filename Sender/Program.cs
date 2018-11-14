@@ -1,22 +1,21 @@
 ﻿using System;
 using System.IO;
+
 using Actors;
 
 using Akka.Actor;
 using Akka.Cluster;
 using Akka.Cluster.Sharding;
+using Akka.Cluster.Tools.Singleton;
 using Akka.Configuration;
 
 namespace Sender
-
 {
     internal class Program
     {
         private static Config _config;
 
         private static string _systemName;
-
-        public static IActorRef SenderRegion { get; set; }
 
         private static void Main(string[] args)
         {
@@ -42,12 +41,20 @@ namespace Sender
             var cluster = Cluster.Get(system);
             cluster.RegisterOnMemberUp(() =>
             {
+                //region
                 var clusterSharding = ClusterSharding.Get(system);
-                SenderRegion = clusterSharding.Start(nameof(SenderActor), Props.Create<SenderActor>(), ClusterShardingSettings.Create(system).WithRole(Roles.Sharding), new MessageExtractor());
 
-                for (var i = 1; i < 11; i++)
+                for (var i = 1; i < 5; i++)
                 {
-                    SenderRegion.Tell(new ShardEnvelope { ShardId = i, EntityId = i, Message = i + " @***" });
+                    var regionActor = clusterSharding.Start(nameof(RegionActor), Props.Create<RegionActor>(), ClusterShardingSettings.Create(system).WithRole(Roles.Sharding), new MessageExtractor());
+                    regionActor.Tell(new ShardEnvelope(i, i, $"{nameof(ShardEnvelope)}: " + i));
+                }
+
+                //entity
+                for (var i = 1; i < 10; i++)
+                {
+                    var props = ClusterSingletonManager.Props(Props.Create<SenderActor>(), ClusterSingletonManagerSettings.Create(system).WithRole(Roles.Sharding));
+                    var actor = system.ActorOf(props, typeof(SenderActor).Name + i);
                 }
             });
 

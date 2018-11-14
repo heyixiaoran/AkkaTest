@@ -5,6 +5,6 @@
         public const string Lighthouse = "lighthouse";
         public const string Sharding = "sharded-node";
         public const string PubSub = "pubsub-node";
-        public const string Worker = "worker-node";
+        public const string Receiver = "receiver-node";
     }
 }

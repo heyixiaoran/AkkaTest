@@ -18,6 +18,8 @@ namespace Lighthouse
 
         private const string IpAddress = "127.0.0.1";
 
+        private static ActorSystem _system;
+
         private static readonly List<ActorSystem> Systems = new List<ActorSystem>();
 
         private static void Main(string[] args)
@@ -39,23 +41,25 @@ namespace Lighthouse
                 _systemName = lighthouseConfig.GetString("name");
             }
 
-            _seeds = _config.GetStringList("akka.cluster.seed-nodes");
-            var ports = new List<int> { 2550 };
+            _system = ActorSystem.Create(_systemName, _config);
 
-            foreach (var port in ports)
-            {
-                var selfAddress = new Address("akka.tcp", _systemName, IpAddress.Trim(), port).ToString();
+            //_seeds = _config.GetStringList("akka.cluster.seed-nodes");
+            //var ports = new List<int> { 2550 };
 
-                if (!_seeds.Contains(selfAddress))
-                {
-                    _seeds.Add(selfAddress);
-                }
-            }
+            //foreach (var port in ports)
+            //{
+            //    var selfAddress = new Address("akka.tcp", _systemName, IpAddress.Trim(), port).ToString();
 
-            foreach (var port in ports)
-            {
-                Systems.Add(CreateLighthouse(port));
-            }
+            //    if (!_seeds.Contains(selfAddress))
+            //    {
+            //        _seeds.Add(selfAddress);
+            //    }
+            //}
+
+            //foreach (var port in ports)
+            //{
+            //    Systems.Add(CreateLighthouse(port));
+            //}
 
             Console.ReadLine();
         }
