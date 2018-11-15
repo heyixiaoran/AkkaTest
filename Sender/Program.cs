@@ -1,12 +1,10 @@
 ﻿using System;
 using System.IO;
-
+using System.Threading;
 using Actors;
 
 using Akka.Actor;
-using Akka.Cluster;
 using Akka.Cluster.Sharding;
-using Akka.Cluster.Tools.Singleton;
 using Akka.Configuration;
 
 namespace Sender
@@ -19,7 +17,7 @@ namespace Sender
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is Sender !");
+            Console.Title = $"{nameof(Sender)}";
 
             if (File.Exists("./akka.conf"))
             {
@@ -36,29 +34,24 @@ namespace Sender
                 _systemName = lighthouseConfig.GetString("name");
             }
 
-            var system = ActorSystem.Create(_systemName, _config);
-
-            var cluster = Cluster.Get(system);
-            cluster.RegisterOnMemberUp(() =>
+            using (var system = ActorSystem.Create(_systemName, _config))
             {
-                //region
-                var clusterSharding = ClusterSharding.Get(system);
+                //var props = ClusterSingletonManager.Props(Props.Create<SingletonActor>(),
+                //    PoisonPill.Instance,
+                //    ClusterSingletonManagerSettings.Create(system).WithRole(Roles.Sharding));
+                //var singleton = system.ActorOf(props, typeof(SingletonActor).Name);
 
-                for (var i = 1; i < 5; i++)
-                {
-                    var regionActor = clusterSharding.Start(nameof(RegionActor), Props.Create<RegionActor>(), ClusterShardingSettings.Create(system).WithRole(Roles.Sharding), new MessageExtractor());
-                    regionActor.Tell(new ShardEnvelope(i, i, $"{nameof(ShardEnvelope)}: " + i));
-                }
+                var shardRegion = ClusterSharding.Get(system).Start(
+                    nameof(SenderActor),
+                    Props.Create<SenderActor>(),
+                    ClusterShardingSettings.Create(system).WithRole(Roles.Sharding),
+                    new MessageExtractor());
 
-                //entity
-                for (var i = 1; i < 10; i++)
-                {
-                    var props = ClusterSingletonManager.Props(Props.Create<SenderActor>(), ClusterSingletonManagerSettings.Create(system).WithRole(Roles.Sharding));
-                    var actor = system.ActorOf(props, typeof(SenderActor).Name + i);
-                }
-            });
+                Thread.Sleep(5000);
+                shardRegion.Tell(new ShardEnvelope("1", "1", "test"));
 
-            Console.ReadLine();
+                system.WhenTerminated.Wait();
+            }
         }
     }
 }

@@ -2,13 +2,13 @@
 {
     public class ShardEnvelope
     {
-        public int ShardId { get; set; }
+        public string ShardId { get; }
 
-        public int EntityId { get; set; }
+        public string EntityId { get; }
 
-        public object Message { get; set; }
+        public object Message { get; }
 
-        public ShardEnvelope(int shardId, int entityId, object message)
+        public ShardEnvelope(string shardId, string entityId, object message)
         {
             ShardId = shardId;
             EntityId = entityId;

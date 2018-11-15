@@ -1,6 +1,5 @@
-﻿using System;
-using Akka.Actor;
-using Akka.Cluster.Sharding;
+﻿using Akka.Actor;
+using Akka.Cluster.Tools.PublishSubscribe;
 
 namespace Actors
 {
@@ -8,13 +7,11 @@ namespace Actors
     {
         public SenderActor()
         {
-            var shard = ClusterSharding.Get(Context.System).ShardRegion(nameof(RegionActor));
+            var mediator = DistributedPubSub.Get(Context.System).Mediator;
 
-            Receive<TestMessage>(_ =>
+            Receive<string>(msg =>
             {
-                var shardId = new Random().Next(1, 4);
-                var entityId = new Random().Next(1, 9);
-                shard.ShardedTell(shardId, entityId, "msg: " + entityId);
+                mediator.Tell(new Publish(Topics.MessageTopic, new ShardEnvelope("1", "1", "test")));
             });
         }
     }

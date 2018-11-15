@@ -24,7 +24,7 @@ namespace Lighthouse
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is a Lighthouse1!");
+            Console.Title = $"{nameof(Lighthouse)}";
 
             if (File.Exists("./akka.conf"))
             {

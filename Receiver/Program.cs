@@ -20,7 +20,7 @@ namespace Receiver
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is Receiver !");
+            Console.Title = $"{nameof(Receiver)}";
 
             if (File.Exists("./akka.conf"))
             {
