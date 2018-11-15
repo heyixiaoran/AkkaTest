@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading;
 using Actors;
 
 using Akka.Actor;
@@ -47,7 +46,6 @@ namespace Sender
                     ClusterShardingSettings.Create(system).WithRole(Roles.Sharding),
                     new MessageExtractor());
 
-                Thread.Sleep(5000);
                 shardRegion.Tell(new ShardEnvelope("1", "1", "test"));
 
                 system.WhenTerminated.Wait();

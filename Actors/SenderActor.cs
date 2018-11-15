@@ -9,9 +9,9 @@ namespace Actors
         {
             var mediator = DistributedPubSub.Get(Context.System).Mediator;
 
-            Receive<string>(msg =>
+            Receive<ShardEnvelope>(msg =>
             {
-                mediator.Tell(new Publish(Topics.MessageTopic, new ShardEnvelope("1", "1", "test")));
+                mediator.Tell(new Publish(Topics.MessageTopic, msg));
             });
         }
     }
