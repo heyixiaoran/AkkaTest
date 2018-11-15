@@ -13,6 +13,11 @@ namespace Actors
             {
                 mediator.Tell(new Publish(Topics.MessageTopic, msg));
             });
+
+            ReceiveAny(msg =>
+            {
+                mediator.Tell(new Publish(Topics.MessageTopic, msg));
+            });
         }
     }
 }

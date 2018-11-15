@@ -17,6 +17,11 @@ namespace Actors
             {
                 Console.WriteLine(JsonConvert.SerializeObject(msg));
             });
+
+            ReceiveAny(msg =>
+            {
+                Console.WriteLine(msg);
+            });
         }
 
         protected override void PreStart()
