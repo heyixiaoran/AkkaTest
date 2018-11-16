@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 
 using Akka.Actor;
+using Akka.Cluster.Tools.Client;
+using Akka.Cluster.Tools.PublishSubscribe;
 using Akka.Configuration;
 
 namespace Lighthouse
@@ -41,7 +43,8 @@ namespace Lighthouse
                 _systemName = lighthouseConfig.GetString("name");
             }
 
-            _system = ActorSystem.Create(_systemName, _config);
+            _system = ActorSystem.Create(_systemName, _config.WithFallback(ClusterClientReceptionist.DefaultConfig())
+                                                             .WithFallback(DistributedPubSub.DefaultConfig()));
 
             //_seeds = _config.GetStringList("akka.cluster.seed-nodes");
             //var ports = new List<int> { 2550 };
@@ -75,7 +78,8 @@ akka.remote.dot-netty.tcp.port = {2}", IpAddress, IpAddress, port))
                               .WithFallback(ConfigurationFactory.ParseString(injectedClusterConfigString))
                               .WithFallback(_config);
 
-            return ActorSystem.Create(_systemName, finalConfig);
+            return ActorSystem.Create(_systemName, finalConfig.WithFallback(ClusterClientReceptionist.DefaultConfig())
+                                                              .WithFallback(DistributedPubSub.DefaultConfig()));
         }
     }
 }

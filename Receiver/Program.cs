@@ -6,6 +6,8 @@ using Actors;
 using Akka.Actor;
 using Akka.Cluster;
 using Akka.Cluster.Sharding;
+using Akka.Cluster.Tools.Client;
+using Akka.Cluster.Tools.PublishSubscribe;
 using Akka.Configuration;
 
 namespace Receiver
@@ -16,7 +18,9 @@ namespace Receiver
 
         private static string _systemName;
 
-        public static IActorRef ReceiverShardActor;
+        public static IActorRef SenderShardActor;
+
+        public static IActorRef ReceiverActor;
 
         private static void Main(string[] args)
         {
@@ -37,13 +41,16 @@ namespace Receiver
                 _systemName = lighthouseConfig.GetString("name");
             }
 
-            var system = ActorSystem.Create(_systemName, _config);
+            var system = ActorSystem.Create(_systemName, _config.WithFallback(ClusterClientReceptionist.DefaultConfig())
+                                                                .WithFallback(DistributedPubSub.DefaultConfig()));
 
             var cluster = Cluster.Get(system);
             cluster.RegisterOnMemberUp(() =>
             {
                 var clusterSharding = ClusterSharding.Get(system);
-                ReceiverShardActor = clusterSharding.StartProxy(nameof(SenderActor), Roles.Sharding, new MessageExtractor());
+                SenderShardActor = clusterSharding.StartProxy(nameof(SenderActor), Roles.Sharding, new MessageExtractor());
+
+                ReceiverActor = system.ActorOf<ReceiverActor>("receiver");
             });
 
             Console.ReadLine();

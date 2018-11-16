@@ -18,21 +18,21 @@ namespace Actors
                 Console.WriteLine(JsonConvert.SerializeObject(msg));
             });
 
-            ReceiveAny(msg =>
+            Receive<string>(msg =>
             {
-                Console.WriteLine(msg);
+                Console.WriteLine(msg + "**************");
             });
         }
 
         protected override void PreStart()
         {
             base.PreStart();
-            _mediator.Tell(new Subscribe(Topics.MessageTopic, Self));
+            _mediator.Tell(new Subscribe(Topics.SendMessageTopic, Self));
         }
 
         protected override void PostStop()
         {
-            _mediator.Tell(new Unsubscribe(Topics.MessageTopic, Self));
+            _mediator.Tell(new Unsubscribe(Topics.SendMessageTopic, Self));
             base.PostStop();
         }
     }

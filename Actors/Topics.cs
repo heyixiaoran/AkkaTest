@@ -2,6 +2,8 @@
 {
     public static class Topics
     {
-        public const string MessageTopic = "Test";
+        public const string SendMessageTopic = "Send";
+
+        public const string ReplyMessageTopic = "Reply";
     }
 }

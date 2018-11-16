@@ -1,9 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+
 using Actors;
 
 using Akka.Actor;
 using Akka.Cluster.Sharding;
+using Akka.Cluster.Tools.Client;
+using Akka.Cluster.Tools.PublishSubscribe;
 using Akka.Configuration;
 
 namespace Sender
@@ -33,7 +37,8 @@ namespace Sender
                 _systemName = lighthouseConfig.GetString("name");
             }
 
-            using (var system = ActorSystem.Create(_systemName, _config))
+            using (var system = ActorSystem.Create(_systemName, _config.WithFallback(ClusterClientReceptionist.DefaultConfig())
+                                                                       .WithFallback(DistributedPubSub.DefaultConfig())))
             {
                 //var props = ClusterSingletonManager.Props(Props.Create<SingletonActor>(),
                 //    PoisonPill.Instance,
@@ -46,7 +51,11 @@ namespace Sender
                     ClusterShardingSettings.Create(system).WithRole(Roles.Sharding),
                     new MessageExtractor());
 
-                shardRegion.Tell(new ShardEnvelope("1", "1", "test"));
+                for (int i = 0; i < 10; i++)
+                {
+                    Thread.Sleep(2000);
+                    shardRegion.Tell(new ShardEnvelope("1", "1", "test"));
+                }
 
                 system.WhenTerminated.Wait();
             }
