@@ -22,6 +22,11 @@ namespace Actors
             {
                 Console.WriteLine(msg + "**************");
             });
+
+            ReceiveAny(msg =>
+            {
+                Console.WriteLine("msg subscribed " + ((SubscribeAck)msg).Subscribe.Ref);
+            });
         }
 
         protected override void PreStart()
