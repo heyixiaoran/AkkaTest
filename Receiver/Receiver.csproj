@@ -21,6 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ActorLib\Actors.csproj" />
+    <ProjectReference Include="..\Actors\Actors.csproj" />
   </ItemGroup>
 </Project>

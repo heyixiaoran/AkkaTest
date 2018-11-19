@@ -28,25 +28,7 @@ namespace Sender
 
             var system = ActorSystem.Create("ClusterSystem", _config);
 
-            //var router = system.ActorOf(FromConfig.Instance.Props(), "routerActor");
-            //var clientActor1 = system.ActorOf(Props.Create(() => new ClientActor1()), "client1");
-
-            //var connect = true;
-            //while (connect)
-            //{
-            //    router.Ask<Routees>(new GetRoutees()).ContinueWith((r) =>
-            //    {
-            //        Console.WriteLine("Reoutees Count: " + r.Result.Members.Count());
-            //        if (r.Result.Members.Count() >= 1)
-            //        {
-            //            connect = false;
-            //        }
-            //    });
-
-            //    Thread.Sleep(1000);
-            //}
-
-            var clientActor1 = system.ActorOf(Props.Create(() => new SenderReceiver()), "sender");
+            var clientActor1 = system.ActorOf(Props.Create(() => new SenderActor()), "sender");
 
             for (int i = 1; i < 100; i++)
             {

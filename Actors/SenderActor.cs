@@ -5,12 +5,12 @@ using Akka.Cluster;
 
 namespace Actors
 {
-    public class SenderReceiver : ReceiveActor
+    public class SenderActor : ReceiveActor
     {
         protected Cluster Cluster = Cluster.Get(Context.System);
         private Address _address;
 
-        public SenderReceiver()
+        public SenderActor()
         {
             Receive<string>(msg =>
             {
