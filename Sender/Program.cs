@@ -7,7 +7,7 @@ using Actors;
 using Akka.Actor;
 using Akka.Configuration;
 
-namespace Client1
+namespace Sender
 {
     internal class Program
     {
@@ -15,7 +15,7 @@ namespace Client1
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is Client1 !");
+            Console.Title = "Sender";
 
             if (File.Exists("./akka.conf"))
             {
@@ -46,13 +46,11 @@ namespace Client1
             //    Thread.Sleep(1000);
             //}
 
-            var clientActor1 = system.ActorOf(Props.Create(() => new ClientActor1()), "client1");
+            var clientActor1 = system.ActorOf(Props.Create(() => new SenderReceiver()), "sender");
 
-            var count = 1;
-            for (int i = 0; i < 100; i++)
+            for (int i = 1; i < 100; i++)
             {
-                clientActor1.Tell(count + " @**************");
-                count += 1;
+                clientActor1.Tell("test" + i);
                 Thread.Sleep(1000);
             }
 

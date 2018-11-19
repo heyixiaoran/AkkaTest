@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+
 using Actors;
+
 using Akka.Actor;
 using Akka.Configuration;
 
-namespace Client2
+namespace Receiver
 {
     internal class Program
     {
@@ -12,7 +14,7 @@ namespace Client2
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is Client2 !");
+            Console.Title = "Receiver";
 
             if (File.Exists("./akka.conf"))
             {
@@ -25,7 +27,7 @@ namespace Client2
 
             var system = ActorSystem.Create("ClusterSystem", _config);
 
-            var clientActor2 = system.ActorOf(Props.Create(() => new ClientActor2()), "client2");
+            var clientActor2 = system.ActorOf(Props.Create(() => new ReceiverActor()), "receiver");
 
             //var actor = system.ActorSelection("/user/client2").Anchor;
             //var router = system.ActorOf(Props.Empty.WithRouter(FromConfig.Instance), "client2");

@@ -1,34 +1,33 @@
 ﻿using System;
+
 using Akka.Actor;
 using Akka.Cluster;
 
 namespace Actors
 {
-    public class ClientActor1 : ReceiveActor
+    public class SenderReceiver : ReceiveActor
     {
-        protected readonly IActorRef Router;
-
         protected Cluster Cluster = Cluster.Get(Context.System);
-        private Address address;
+        private Address _address;
 
-        public ClientActor1()
+        public SenderReceiver()
         {
             Receive<string>(msg =>
             {
                 Console.WriteLine(msg);
-                //Router.Tell(msg);
-                if (address != null)
+
+                if (_address != null)
                 {
-                    Context.System.ActorSelection(new RootActorPath(address) + "/user/client2").Tell(msg);
+                    Context.System.ActorSelection(new RootActorPath(_address) + "/user/receiver").Tell(msg);
                 }
             });
 
             Receive<ClusterEvent.MemberUp>(msg =>
             {
                 Console.WriteLine($"ClusterEvent.MemberUp {msg.Member.Address}");
-                if (msg.Member.Roles.Contains("client2Role"))
+                if (msg.Member.Roles.Contains("receiver"))
                 {
-                    address = msg.Member.Address;
+                    _address = msg.Member.Address;
                 }
             });
 

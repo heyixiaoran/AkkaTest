@@ -4,9 +4,9 @@ using Akka.Actor;
 
 namespace Actors
 {
-    public class ServerActor : ReceiveActor
+    public class LighthourseActor : ReceiveActor
     {
-        public ServerActor()
+        public LighthourseActor()
         {
             Receive<string>(msg =>
             {

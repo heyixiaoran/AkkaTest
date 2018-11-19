@@ -1,17 +1,18 @@
 ﻿using System;
 using System.IO;
+
 using Akka.Actor;
 using Akka.Configuration;
 
 namespace Server1
 {
-    internal class Program
+    internal class Lighthourse1
     {
         private static Config _config;
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is a Server!");
+            Console.Title = "Lighthourse1";
 
             if (File.Exists("./akka.conf"))
             {

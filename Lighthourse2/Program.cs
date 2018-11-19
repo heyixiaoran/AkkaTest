@@ -6,7 +6,7 @@ using Akka.Configuration;
 
 using Autofac;
 
-namespace Server2
+namespace Lighthourse2
 {
     internal class Program
     {
@@ -14,7 +14,7 @@ namespace Server2
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is a Server2 !");
+            Console.Title = "Lighthourse2";
 
             if (File.Exists("./akka.conf"))
             {

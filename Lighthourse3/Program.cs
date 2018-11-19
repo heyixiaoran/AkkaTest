@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
+
 using Akka.Actor;
 using Akka.Configuration;
 
 using Autofac;
 
-namespace Server3
+namespace Lighthourse3
 {
     internal class Program
     {
@@ -13,7 +14,7 @@ namespace Server3
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is a Server3 !");
+            Console.Title = "Lighthourse2";
 
             if (File.Exists("./akka.conf"))
             {
