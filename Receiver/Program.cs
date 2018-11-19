@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+
 using Actors;
+
 using Akka.Actor;
 using Akka.Configuration;
 
-namespace Client2
+namespace Receiver
 {
     internal class Program
     {
@@ -12,7 +14,7 @@ namespace Client2
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is Client2 !");
+            Console.Title = "Receiver";
 
             if (File.Exists("./akka.conf"))
             {

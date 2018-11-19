@@ -6,7 +6,7 @@ using Akka.Configuration;
 
 using Autofac;
 
-namespace Server2
+namespace Lighthourse3
 {
     internal class Program
     {
@@ -14,7 +14,7 @@ namespace Server2
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("This is a Server2 !");
+            Console.Title = "Lighthourse3";
 
             if (File.Exists("./akka.conf"))
             {
@@ -32,11 +32,11 @@ namespace Server2
             //builder.RegisterType<ClientActor1>();
             //builder.RegisterType<ClientActor2>();
 
-            IContainer container = builder.Build();
+            //IContainer container = builder.Build();
 
             var system = ActorSystem.Create("ClusterSystem", _config);
-            //var server2Actor = system.ActorOf(Props.Create(() => new ServerActor()), "server2");
-            //Console.WriteLine(server2Actor.Path.Name);
+            //var server3Actor = system.ActorOf(Props.Create(() => new ServerActor()), "server3");
+            //Console.WriteLine(server3Actor.Path.Name);
 
             Console.ReadLine();
         }

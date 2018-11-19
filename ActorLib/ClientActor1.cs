@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Akka.Actor;
 using Akka.Cluster;
 
@@ -11,16 +12,15 @@ namespace Actors
         protected Cluster Cluster = Cluster.Get(Context.System);
         private Address address;
 
-        public ClientActor1()
+        public ClientActor1(IActorRef router)
         {
+            Router = router;
+
             Receive<string>(msg =>
             {
                 Console.WriteLine(msg);
-                //Router.Tell(msg);
-                if (address != null)
-                {
-                    Context.System.ActorSelection(new RootActorPath(address) + "/user/client2").Tell(msg);
-                }
+
+                Router.Tell(msg);
             });
 
             Receive<ClusterEvent.MemberUp>(msg =>
