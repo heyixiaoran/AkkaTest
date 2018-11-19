@@ -7,7 +7,7 @@ namespace Actors
     /// <summary>
     /// Actor responsible for supervising the creation of all transport actors
     /// </summary>
-    internal class SupervisorActor : ReceiveActor
+    internal class SupervisorActor : Akka.Actor.ReceiveActor
     {
         private readonly SupervisorStrategy _strategy = new OneForOneStrategy(exception => Directive.Restart);
 

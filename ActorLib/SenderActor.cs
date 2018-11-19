@@ -5,14 +5,14 @@ using Akka.Cluster;
 
 namespace Actors
 {
-    public class ClientActor1 : ReceiveActor
+    public class SenderActor : Akka.Actor.ReceiveActor
     {
         protected readonly IActorRef Router;
 
         protected Cluster Cluster = Cluster.Get(Context.System);
         private Address address;
 
-        public ClientActor1(IActorRef router)
+        public SenderActor(IActorRef router)
         {
             Router = router;
 
@@ -26,7 +26,7 @@ namespace Actors
             Receive<ClusterEvent.MemberUp>(msg =>
             {
                 Console.WriteLine($"ClusterEvent.MemberUp {msg.Member.Address}");
-                if (msg.Member.Roles.Contains("client2Role"))
+                if (msg.Member.Roles.Contains("receiver"))
                 {
                     address = msg.Member.Address;
                 }

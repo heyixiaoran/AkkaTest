@@ -4,7 +4,7 @@ using Akka.Actor;
 
 namespace Actors
 {
-    public class ServerActor : ReceiveActor
+    public class ServerActor : Akka.Actor.ReceiveActor
     {
         public ServerActor()
         {

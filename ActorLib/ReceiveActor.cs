@@ -1,12 +1,10 @@
 ﻿using System;
 
-using Akka.Actor;
-
 namespace Actors
 {
-    public class ClientActor2 : ReceiveActor
+    public class ReceiveActor : Akka.Actor.ReceiveActor
     {
-        public ClientActor2()
+        public ReceiveActor()
         {
             Receive<string>(msg =>
             {

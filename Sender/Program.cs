@@ -48,7 +48,7 @@ namespace Sender
                 Thread.Sleep(1000);
             }
 
-            var clientActor1 = system.ActorOf(Props.Create(() => new ClientActor1(router)), "client1");
+            var clientActor1 = system.ActorOf(Props.Create(() => new SenderActor(router)), "client1");
 
             for (int i = 1; i < 100; i++)
             {
