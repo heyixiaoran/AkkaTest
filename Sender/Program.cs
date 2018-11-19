@@ -51,10 +51,10 @@ namespace Sender
                     ClusterShardingSettings.Create(system).WithRole(Roles.Sharding),
                     new MessageExtractor());
 
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 100; i++)
                 {
                     Thread.Sleep(2000);
-                    shardRegion.Tell(new ShardEnvelope("1", "1", "test"));
+                    shardRegion.Tell(new ShardEnvelope("1", "1", "test" + i));
                 }
 
                 system.WhenTerminated.Wait();

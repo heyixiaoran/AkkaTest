@@ -20,7 +20,7 @@ namespace Actors
 
             Receive<string>(msg =>
             {
-                Console.WriteLine(msg + "**************");
+                Console.WriteLine(msg);
             });
 
             ReceiveAny(msg =>

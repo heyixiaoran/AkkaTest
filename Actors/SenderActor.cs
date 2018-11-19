@@ -10,18 +10,16 @@ namespace Actors
 
         public SenderActor()
         {
-            var mediator = DistributedPubSub.Get(Context.System).Mediator;
-
             Receive<ShardEnvelope>(msg =>
             {
-                mediator.Tell(new Publish(Topics.SendMessageTopic, msg));
+                _mediator.Tell(new Publish(Topics.SendMessageTopic, msg));
             });
 
             Receive<string>(msg =>
             {
                 Console.WriteLine(msg);
 
-                mediator.Tell(new Publish(Topics.SendMessageTopic, msg));
+                _mediator.Tell(new Publish(Topics.SendMessageTopic, msg));
                 //mediator.Tell(new Publish(Topics.SendMessageTopic, msg), Self);
 
                 //var actor = system.ActorOf(Props.Create(() => new MyActor()), "my-actor");
