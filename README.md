@@ -1,3 +1,7 @@
 # AkkaTest
 
-# see other branch code for test
+# See other branch code for test
+
+* router
+* no router
+* shard
