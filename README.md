@@ -1,3 +1,3 @@
 # AkkaTest
 
-# remember role config in config file
+* remember role config in config file
