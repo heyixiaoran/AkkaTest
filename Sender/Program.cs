@@ -31,7 +31,6 @@ namespace Sender
             var system = ActorSystem.Create("ClusterSystem", _config);
 
             var router = system.ActorOf(Props.Empty.WithRouter(FromConfig.Instance), "routeractor");
-            //var clientActor1 = system.ActorOf(Props.Create(() => new ClientActor1()), "client1");
 
             var connect = true;
             while (connect)
@@ -39,7 +38,7 @@ namespace Sender
                 router.Ask<Routees>(new GetRoutees()).ContinueWith((r) =>
                 {
                     Console.WriteLine("Reoutees Count: " + r.Result.Members.Count());
-                    if (r.Result.Members.Count() >= 1)
+                    if (r.Result.Members.Any())
                     {
                         connect = false;
                     }

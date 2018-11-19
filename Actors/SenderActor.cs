@@ -5,12 +5,11 @@ using Akka.Cluster;
 
 namespace Actors
 {
-    public class SenderActor : Akka.Actor.ReceiveActor
+    public class SenderActor : ReceiveActor
     {
         protected readonly IActorRef Router;
 
         protected Cluster Cluster = Cluster.Get(Context.System);
-        private Address address;
 
         public SenderActor(IActorRef router)
         {
@@ -26,10 +25,6 @@ namespace Actors
             Receive<ClusterEvent.MemberUp>(msg =>
             {
                 Console.WriteLine($"ClusterEvent.MemberUp {msg.Member.Address}");
-                if (msg.Member.Roles.Contains("receiver"))
-                {
-                    address = msg.Member.Address;
-                }
             });
 
             Receive<ClusterEvent.UnreachableMember>(msg =>

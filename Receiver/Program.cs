@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 
+using Actors;
+
 using Akka.Actor;
 using Akka.Configuration;
 
@@ -25,10 +27,7 @@ namespace Receiver
 
             var system = ActorSystem.Create("ClusterSystem", _config);
 
-            var clientActor2 = system.ActorOf(Props.Create(() => new Actors.ReceiveActor()), "receiver");
-
-            //var actor = system.ActorSelection("/user/client2").Anchor;
-            //var router = system.ActorOf(Props.Empty.WithRouter(FromConfig.Instance), "client2");
+            var clientActor2 = system.ActorOf(Props.Create(() => new ReceiverActor()), "receiver");
 
             Console.ReadLine();
         }
