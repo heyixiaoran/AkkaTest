@@ -1,4 +1,4 @@
 # AkkaTest
 
-* only one lighthourse —— ID 13 error
-* remember use defaultconfig when create system —— ID 9 error
+* only one lighthourse —— otherwise  ID 13 error
+* remember use defaultconfig when create system —— otherwise  ID 9 error
