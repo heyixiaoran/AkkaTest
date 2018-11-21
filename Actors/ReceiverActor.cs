@@ -38,6 +38,8 @@ namespace Actors
         protected override void PostStop()
         {
             _mediator.Tell(new Unsubscribe(Topics.SendMessageTopic, Self));
+            Self.Tell(PoisonPill.Instance);
+
             base.PostStop();
         }
     }

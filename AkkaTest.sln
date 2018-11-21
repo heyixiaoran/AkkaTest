@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Receiver", "Receiver\Receiv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sender", "Sender\Sender.csproj", "{039BE035-35FD-492D-B807-8AFBA0EC0512}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sender2", "Sender2\Sender2.csproj", "{7C530DDE-2F90-4EEC-9BA5-4A5AA0D33663}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{039BE035-35FD-492D-B807-8AFBA0EC0512}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{039BE035-35FD-492D-B807-8AFBA0EC0512}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{039BE035-35FD-492D-B807-8AFBA0EC0512}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C530DDE-2F90-4EEC-9BA5-4A5AA0D33663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C530DDE-2F90-4EEC-9BA5-4A5AA0D33663}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C530DDE-2F90-4EEC-9BA5-4A5AA0D33663}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C530DDE-2F90-4EEC-9BA5-4A5AA0D33663}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
