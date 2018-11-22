@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
-
 using Actors;
 
 using Akka.Actor;
@@ -54,7 +53,7 @@ namespace Sender
                 for (int i = 0; i < 100; i++)
                 {
                     Thread.Sleep(2000);
-                    shardRegion.Tell(new ShardEnvelope("1", "1", "test" + i));
+                    shardRegion.Tell(new ShardEnvelope("1", "1", "TestFromSender1"));
                 }
 
                 system.WhenTerminated.Wait();

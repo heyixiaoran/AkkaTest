@@ -54,7 +54,7 @@ namespace Sender2
                 for (int i = 0; i < 100; i++)
                 {
                     Thread.Sleep(2000);
-                    shardRegion.Tell(new ShardEnvelope("2", "2", "test" + i));
+                    shardRegion.Tell(new ShardEnvelope("2", "2", "TestFromSender2"));
                 }
 
                 system.WhenTerminated.Wait();
