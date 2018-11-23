@@ -35,4 +35,26 @@ namespace Actors
             });
         }
     }
+
+    //public class SenderActor : ReceivePersistentActor
+    //{
+    //    public List<TestMessage> Messages = new List<TestMessage>();
+
+    //    public override string PersistenceId { get; } = Context.Parent.Path.Name + "/" + Context.Self.Path.Name;
+
+    //    public SenderActor()
+    //    {
+    //        Recover<TestMessage>(msg => Messages.Add(msg));
+
+    //        Command<TestMessage>(msg =>
+    //        {
+    //            Persist(msg, purchased =>
+    //            {
+    //                Messages.Add(msg);
+    //                var name = Uri.UnescapeDataString(Self.Path.Name);
+    //                Console.WriteLine($"'{name}' purchased '{purchased.Message}'.\nAll items: [{string.Join(", ", Messages)}]\n--------------------------");
+    //            });
+    //        });
+    //    }
+    //}
 }

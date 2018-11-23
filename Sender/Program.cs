@@ -53,8 +53,12 @@ namespace Sender
                 for (int i = 0; i < 100; i++)
                 {
                     Thread.Sleep(2000);
-                    shardRegion.Tell(new ShardEnvelope("1", "1", "TestFromSender1"));
+                    shardRegion.Tell(new ShardEnvelope("1", "1", $"{shardRegion}: TestFromSender1"));
                 }
+
+                //((LocalActorRef)shardRegion).Parent.Path.ToString() —— akka://actor-system/system/sharding
+                //((LocalActorRef)shardRegion).Path.ToString() —— akka://actor-system/system/sharding/SenderActor
+                //shardRegion.ToString() —— [akka://actor-system/system/sharding/SenderActor#434098676]
 
                 system.WhenTerminated.Wait();
             }
