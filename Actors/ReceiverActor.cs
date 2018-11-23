@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Akka.Actor;
+using Akka.Cluster.Sharding;
 using Akka.Cluster.Tools.PublishSubscribe;
 
 using Newtonsoft.Json;
@@ -23,9 +24,15 @@ namespace Actors
                 Console.WriteLine(msg);
             });
 
-            ReceiveAny(msg =>
+            //ReceiveAny(msg =>
+            //{
+            //    Console.WriteLine("msg subscribed " + ((SubscribeAck)msg).Subscribe.Ref);
+            //});
+
+            Context.SetReceiveTimeout(TimeSpan.FromSeconds(5));
+            Receive<ReceiveTimeout>(_ =>
             {
-                Console.WriteLine("msg subscribed " + ((SubscribeAck)msg).Subscribe.Ref);
+                Context.Parent.Tell(new Passivate(PoisonPill.Instance));
             });
         }
 
